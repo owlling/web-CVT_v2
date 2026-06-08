@@ -1,0 +1,22 @@
+{
+  "name": "色觉测试仪",
+  "id": "color-vision-test-plugin",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": {
+    "main": "ui.html",
+    "plate02": "assets/ishihara/plate-02.svg",
+    "plate05": "assets/ishihara/plate-05.svg",
+    "plate07": "assets/ishihara/plate-07.svg",
+    "plate08": "assets/ishihara/plate-08.svg",
+    "plate12": "assets/ishihara/plate-12.svg",
+    "plate16": "assets/ishihara/plate-16.svg",
+    "plate29": "assets/ishihara/plate-29.svg",
+    "plate35": "assets/ishihara/plate-35.svg",
+    "plate45": "assets/ishihara/plate-45.svg",
+    "plate74": "assets/ishihara/plate-74.svg",
+    "plate96": "assets/ishihara/plate-96.svg"
+  },
+  "documentAccess": "dynamic-page",
+  "editorType": ["figma"]
+}
