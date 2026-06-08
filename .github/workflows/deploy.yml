@@ -30,8 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Build (with logs)
+        run: npm run build -- --logLevel info
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
