@@ -28,7 +28,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm cache clean --force && npm install --no-audit --no-fund
 
       - name: Build (with logs)
         run: npm run build -- --logLevel info
