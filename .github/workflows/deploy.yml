@@ -26,11 +26,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: npm install -g npm@10 && npm install --no-audit --no-fund
+      - name: Install dependencies (npm exit handler 容错)
+        run: |
+          set +e
+          npm install --no-audit --no-fund
+          echo "npm 退出码: $?"
+          if [ ! -d "node_modules/vite" ] || [ ! -d "node_modules/@vitejs/plugin-react" ]; then
+            echo "关键依赖缺失，重新安装..."
+            npm install --no-audit --no-fund
+          fi
+          echo "验证关键依赖是否存在："
+          ls -la node_modules/vite/package.json node_modules/@vitejs/plugin-react/package.json
+          echo "依赖安装完成"
 
       - name: Build
-        run: npm run build
+        run: npx vite build
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
