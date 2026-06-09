@@ -21,22 +21,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 20
-          cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install --no-audit --no-fund --prefer-offline || true
+          # 验证关键依赖是否已安装
+          if [ ! -f "node_modules/vite/package.json" ]; then
+            echo "vite 未安装，尝试二次安装..."
+            npm install --no-audit --no-fund --prefer-offline || true
+          fi
+          echo "=== 验证关键依赖 ==="
+          ls -la node_modules/vite/package.json
+          ls -la node_modules/@vitejs/plugin-react/package.json
+          ls -la node_modules/vite-tsconfig-paths/package.json
+          echo "=== 依赖总数 ==="
+          ls node_modules | wc -l
 
       - name: Build
-        run: ./node_modules/.bin/vite build
+        run: |
+          echo "构建前：列出 node_modules/.bin/vite"
+          ls -la node_modules/.bin/vite
+          echo "开始构建..."
+          node ./node_modules/vite/bin/vite.js build
+          echo "构建完成！dist 目录："
+          ls -la dist
+          echo "dist 大小："
+          du -sh dist
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
