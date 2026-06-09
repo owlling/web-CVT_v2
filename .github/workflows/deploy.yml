@@ -21,35 +21,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: 20
+          cache: 'pnpm'
 
-      - name: Clean and install dependencies
-        run: |
-          # 清除潜在损坏的状态
-          rm -rf node_modules package-lock.json
-          npm cache clean --force
-          # 重新生成 lockfile 并安装
-          npm install --no-audit --no-fund --loglevel=error
-          echo "依赖数量："
-          ls node_modules | wc -l
-          echo "验证 vite："
-          ls -la node_modules/vite/package.json
-          echo "验证 @vitejs/plugin-react："
-          ls -la node_modules/@vitejs/plugin-react/package.json
-          echo "验证 vite-tsconfig-paths："
-          ls -la node_modules/vite-tsconfig-paths/package.json
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build
-        run: |
-          echo "开始构建..."
-          node -e "const { build } = require('./node_modules/vite/dist/node/index.cjs'); build({ configFile: './vite.config.ts' }).then(() => console.log('构建成功')).catch(e => { console.error('构建失败:', e.message); process.exit(1); })"
-          echo "dist 目录大小："
-          du -sh dist 2>/dev/null || echo "dist 不存在"
-          echo "dist 内容："
-          ls -la dist 2>/dev/null || echo "dist 为空"
+        run: ./node_modules/.bin/vite build
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
